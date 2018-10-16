@@ -1,0 +1,15 @@
+{
+  "development": {
+    "host": "localhost",
+    "user": "kyliepace",
+    "port": "6379",
+    "db": 1
+  },
+
+  "test": {
+    "host": "localhost",
+    "user": "kyliepace",
+    "port": "6379",
+    "db": 1
+  }
+}
