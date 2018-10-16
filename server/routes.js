@@ -6,15 +6,12 @@ const router = new koaRouter();
 
 const requireAuth = passport.authenticate('jwt', { session: true });
 
-router.get('/', requireAuth, (ctx) => {
-  ctx.body = "Welcome! To the Koala Book of Everything!"
+router.post('/register', (ctx, next) => {
+  Authentication.signup(ctx, next);
 });
 
-router.post('/register', async (ctx, next) => {
-  //const user = await queries.addUser(ctx.request.body); //add user to mongoDB
-  next();
-}, (ctx) => {
-  Authentication.signup(ctx, next)
+router.get('/', requireAuth, (ctx) => {
+  ctx.body = "Welcome! To the Koala Book of Everything!"
 });
 
 router.get('/login', async (ctx) => {

@@ -6,18 +6,17 @@ const router = require('./routes.js');
 const app = new koa();
 const mongoose = require('mongoose');
 const cors = require('cors');
+const dotenv = require("dotenv");
+dotenv.config();
 
 
 // DB Setup
 //mongoose.connect('mongodb://localhost/auth');
 
-app.use(cors());
+//app.use(cors());
 
 // body parser
 app.use(bodyParser());
-
-// authentication
-require('./auth.js');
 
 app.use(router.routes())
   .use(router.allowedMethods());
