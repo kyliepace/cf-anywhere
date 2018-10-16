@@ -6,7 +6,7 @@ function tokenForUser(user) {
   return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
 }
 
-exports.signin = function(ctx, next) {
+exports.sendToken = function(ctx, next) {
   // User has already had their email and password auth'd
   // We just need to give them a token
   //res.send({ token: tokenForUser(req.user) });
@@ -29,43 +29,35 @@ exports.signup = function(ctx, next) {
     return ctx;
   }
 
-  // // See if a user with the given email exists
-  // User.findOne({ email: email }, function(err, existingUser) {
-  //   if (err) { return next(err); }
+  // See if a user with the given email exists
+  User.findOne({ email: email }, function(err, existingUser) {
+    if (err) { return next(err); }
 
-  //   // If a user with email does exist, return an error
-  //   if (existingUser) {
-  //     ctx.status = ctx.status = 422;
-  //     ctx.body = {
-  //       message: "Email is in user"
-  //     };
-  //     return ctx;
-  //   }
+    // If a user with email does exist, return an error
+    if (existingUser) {
+      ctx.status = ctx.status = 422;
+      ctx.body = {
+        message: "Email is in user"
+      };
+      return ctx;
+    }
 
-  //   // If a user with email does NOT exist, create and save user record
-  //   const user = new User({
-  //     email: email,
-  //     password: password
-  //   });
-
-  //   user.save(function(err) {
-  //     if (err) { return next(err); }
-
-  //     // Repond to request indicating the user was created
-  //     //res.json({ token: tokenForUser(user) });
-  //     ctx.status = 200;
-  //     ctx.body = {
-  //       token: tokenForUser(user)
-  //     }
-  //     return ctx;
-  //   });
-  // });
-  ctx.status = 200;
-  ctx.body = {
-    token: tokenForUser(new User({
+    // If a user with email does NOT exist, create and save user record
+    const user = new User({
       email: email,
       password: password
-    }))
-  }
-  return ctx;
+    });
+
+    user.save(function(err) {
+      if (err) { return next(err); }
+
+      // Repond to request indicating the user was created
+      //res.json({ token: tokenForUser(user) });
+      ctx.status = 200;
+      ctx.body = {
+        token: tokenForUser(user)
+      }
+      return ctx;
+    });
+  });
 }
