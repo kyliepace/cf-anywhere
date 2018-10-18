@@ -6,21 +6,31 @@ function tokenForUser(user) {
   return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
 }
 
-exports.google = passport => (ctx) => {
-  passport.authenticate('google-id-token', (err, user) => {
-    if (!user) {
-      ctx.status = 400;
-      return ctx.body = { status: 'User not authenticated'}
+const onAuth = (ctx, type) => (err, user) => {
+  if (!user) {
+    console.log(err);
+    ctx.status = 400;
+    return ctx.body = { status: 'User not authenticated'}
+  }
+  else {
+    console.log(`authenticated ${type} user ${user[type].id}`);
+    ctx.user = user;
+    ctx.status = 200;
+    ctx.body = {
+      token: tokenForUser(user[type])
     }
-    else {
-      ctx.user = user;
-      ctx.status = 200;
-      ctx.body = {
-        token: tokenForUser(user.google)
-      }
-    }
-  })(ctx);
-}
+  }
+};
+
+exports.google = passport => ctx => {
+  let afterAuth = onAuth(ctx, 'google');
+  return passport.authenticate('google-id-token', afterAuth)(ctx);
+};
+
+exports.facebook = passport => ctx => {
+  let afterAuth = onAuth(ctx, 'facebook');
+  return passport.authenticate('facebook-token', afterAuth)(ctx);
+};
 
 exports.signup = function(ctx, next) {
   const email = ctx.request.body.email;

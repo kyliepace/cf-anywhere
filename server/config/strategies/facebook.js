@@ -7,6 +7,7 @@ const facebookLogin = new FacebookTokenStrategy({
   clientID        : configAuth.facebookAuth.clientID,
   clientSecret    : configAuth.facebookAuth.clientSecret
 }, (token, refreshToken, profile, done) => {
+
   process.nextTick(function() {
 
     // find the user in the database based on their facebook id

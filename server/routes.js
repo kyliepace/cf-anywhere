@@ -46,22 +46,7 @@ module.exports = passport => {
     }
   });
 
-  router.post('/auth/facebook', async (ctx, next) => {
-    return passport.authenticate('facebook-token', { session: false}, async (err, user, info, status) => {
-      if (!user) {
-        ctx.status = 400;
-        return ctx.body = { status: 'User not authenticated'};
-      }
-      else {
-        ctx.user = user;
-        ctx.auth = {
-          id: user.id
-        };
-        Authentication.sendToken(ctx, next);
-      }
-    })(ctx, next);
-  });
-
+  router.post('/auth/facebook', Authentication.facebook(passport));
   router.post('/auth/google', Authentication.google(passport));
 
   return router;
