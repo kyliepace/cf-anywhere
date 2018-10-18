@@ -1,12 +1,11 @@
 'use strict';
-var FacebookStrategy = require('passport-facebook').Strategy;
 var configAuth = require('../auth.js');
 const User = require('../../models/user');
+var FacebookTokenStrategy = require('passport-facebook-token');
 
-const facebookLogin = new FacebookStrategy({
+const facebookLogin = new FacebookTokenStrategy({
   clientID        : configAuth.facebookAuth.clientID,
-  clientSecret    : configAuth.facebookAuth.clientSecret,
-  callbackURL     : configAuth.facebookAuth.callbackURL
+  clientSecret    : configAuth.facebookAuth.clientSecret
 }, (token, refreshToken, profile, done) => {
   process.nextTick(function() {
 

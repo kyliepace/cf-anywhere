@@ -6,16 +6,21 @@ function tokenForUser(user) {
   return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
 }
 
-exports.sendToken = function(ctx, next) {
-  // User has already had their email and password auth'd
-  // We just need to give them a token
-  //res.send({ token: tokenForUser(req.user) });
-  ctx.status = 200;
-  ctx.body = {
-    token: tokenForUser(ctx.user)
-  }
-  return ctx;
-};
+exports.google = passport => (ctx) => {
+  passport.authenticate('google-id-token', (err, user) => {
+    if (!user) {
+      ctx.status = 400;
+      return ctx.body = { status: 'User not authenticated'}
+    }
+    else {
+      ctx.user = user;
+      ctx.status = 200;
+      ctx.body = {
+        token: tokenForUser(user.google)
+      }
+    }
+  })(ctx);
+}
 
 exports.signup = function(ctx, next) {
   const email = ctx.request.body.email;
