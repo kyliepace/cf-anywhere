@@ -3,7 +3,7 @@
 # dependencies
 /*/node_modules
 .env
-/server/config/database.js
+/*/.env
 
 # testing
 /client/coverage

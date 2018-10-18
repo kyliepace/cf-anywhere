@@ -2,28 +2,28 @@
 const Authentication = require('./controllers/auth');
 const koaRouter = require('koa-router');
 
-const saveLogIn = (user, ctx, next) => {
+const saveLogIn = (user, ctx) => {
   if (user) {
     ctx.login(user);
-    next();
+    return;
   } else {
     ctx.status = 400;
     ctx.body = { status: 'error' };
   }
+  return ctx;
 };
 
 
 module.exports = passport => {
   const router = new koaRouter();
-  const requireAuth = passport.authenticate('jwt', { session: true });
+  const requireAuth = passport.authenticate('jwt', { session: false });
 
+  router.get('/user/*', requireAuth, (ctx) => {
+    ctx.body = "Welcome! To the Koala Book of Everything!"
+  });
 
   router.post('/register', (ctx, next) => {
     Authentication.signup(ctx, next);
-  });
-
-  router.get('/', requireAuth, (ctx) => {
-    ctx.body = "Welcome! To the Koala Book of Everything!"
   });
 
   router.get('/login', async (ctx) => {
@@ -73,17 +73,27 @@ module.exports = passport => {
 
 
   // google routes
-  router.get('/auth/google',
-    passport.authenticate('google', {
-      scope : ['profile', 'email']
-    })
+  router.get('/auth/google', async (ctx, next) => {
+    return passport.authenticate('google', {
+      scope: ['profile', 'email']
+    })(ctx, next)
+  }
+    // passport.authenticate('google', {
+    //   scope : ['profile', 'email']
+    // })
   );
 
-  router.get('/auth/google/callback', (ctx, next) => {
-    passport.authenticate('google', (err, user, info, status) => {
-      saveLogIn(user, ctx, next);
-    });
-    Authentication.sendToken(ctx);
+  router.get('/auth/google/callback', async (ctx, next) => {
+    return passport.authenticate('google', async (err, user, info, status) => {
+      //await saveLogIn(user, ctx);
+      ctx.user = user;
+      Authentication.sendToken(ctx, next);
+      ctx.status = 200;
+      ctx.body = user;
+      console.log(ctx.user)
+      ctx.redirect('http://localhost:3000/')
+      //ctx.body = ctx.user;
+    })(ctx, next)
   });
   return router;
 }
