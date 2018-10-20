@@ -2,9 +2,9 @@ const passport = require('koa-passport');
 const User = require('../models/user');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const LocalStrategy = require('passport-local');
 const facebookLogin = require('./strategies/facebook.js');
 const googleLogin = require('./strategies/google.js');
+const localLogin = require('./strategies/local.js');
 
 // used to serialize the user for the session
 passport.serializeUser(function(user, done) {
@@ -18,26 +18,6 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-
-// Create local strategy
-const localOptions = { usernameField: 'email' };
-const localLogin = new LocalStrategy(localOptions, function(email, password, done) {
-  // Verify this email and password, call done with the user
-  // if it is the correct email and password
-  // otherwise, call done with false
-  User.findOne({ email: email }, function(err, user) {
-    if (err) { return done(err); }
-    if (!user) { return done(null, false); }
-
-    // compare passwords - is `password` equal to user.password?
-    user.comparePassword(password, function(err, isMatch) {
-      if (err) { return done(err); }
-      if (!isMatch) { return done(null, false); }
-
-      return done(null, user);
-    });
-  });
-});
 
 // Setup options for JWT Strategy
 const jwtOptions = {

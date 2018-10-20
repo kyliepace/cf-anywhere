@@ -11,9 +11,7 @@ module.exports = passport => {
     ctx.body = "Welcome! To the Koala Book of Everything!"
   });
 
-  router.post('/register', (ctx, next) => {
-    Authentication.signup(ctx, next);
-  });
+  router.post('/register', Authentication.signup);
 
   router.get('/login', async (ctx) => {
     if (!ctx.isAuthenticated()) {
@@ -23,15 +21,6 @@ module.exports = passport => {
       // ctx.body = fs.createReadStream('../src/server/views/login.html');
     } else {
       //ctx.redirect('/auth/status');
-    }
-  });
-
-  router.post('/login', async (ctx, next) => {
-    passport.authenticate('local', (err, user, info, status) => {
-      saveLogIn(user, ctx, next);
-    })(ctx, next),
-    (ctx, next) => {
-      Authentication.sendToken(ctx, next);
     }
   });
 
@@ -45,7 +34,7 @@ module.exports = passport => {
       ctx.throw(401);
     }
   });
-
+  router.post('/auth/login', Authentication.local(passport));
   router.post('/auth/facebook', Authentication.facebook(passport));
   router.post('/auth/google', Authentication.google(passport));
 
