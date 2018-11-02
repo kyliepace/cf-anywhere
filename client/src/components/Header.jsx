@@ -1,11 +1,11 @@
 'use strict';
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login';
 import { GoogleLogin } from 'react-google-login';
 import * as actions from '../actions';
 import Icon from 'antd/lib/icon';
-import SignUp from './SignUp.jsx';
 
 const Header = props => {
 
@@ -58,28 +58,42 @@ const Header = props => {
       });
     });
   };
+
+  const renderLinks = () => {
+    if (props.authenticated) {
+      return (
+        <menu>
+          <Link to="/signout">Sign Out</Link>
+        </menu>
+      )
+    }
+    else {
+      return (
+        <menu>
+          <Link to="/signup">Register</Link>
+          <Link to="/signin">Sign In</Link>
+          <FacebookLogin
+            appId={process.env.REACT_APP_FACEBOOK_ID}
+            autoLoad={false}
+            fields="name,email,picture"
+            callback={facebookResponse}
+            icon='fa-facebook'
+            textButton='Sign in with Facebook'
+          />
+          <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_ID}
+            buttonText="Sign in with Google"
+            onSuccess={googleResponse}
+            onFailure={googleResponse}
+          />
+        </menu>
+      )
+    }
+  };
+
   return (
     <header className="App-header">
-      <menu>
-        <SignUp {...props} />
-        <a className="btn btn-default" href='http://localhost:3060/auth/login'>Login</a>
-        <FacebookLogin
-          appId={process.env.REACT_APP_FACEBOOK_ID}
-          autoLoad={false}
-          fields="name,email,picture"
-          callback={facebookResponse}
-          icon='fa-facebook'
-          textButton='Login with Facebook'
-        />
-        <GoogleLogin
-          clientId={process.env.REACT_APP_GOOGLE_ID}
-          buttonText="Login"
-          onSuccess={googleResponse}
-          onFailure={googleResponse}
-        />
-        <button onClick={props.logOut} >Log Out</button>
-        <Icon type='facebook'/>
-      </menu>
+      {renderLinks()}
       <span>
         CF PR Tracker
       </span>
@@ -87,4 +101,10 @@ const Header = props => {
   )
 };
 
-export default connect(null, actions)(Header);
+const mapStateToProps = state => {
+  return {
+    authenticated: state.auth.authenticated
+  };
+};
+
+export default connect(mapStateToProps, actions)(Header);

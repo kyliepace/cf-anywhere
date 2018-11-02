@@ -40,7 +40,7 @@ userSchema.pre('save', function(next) {
     if (err) { return next(err); }
 
     // hash (encrypt) our password using the salt
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
+    bcrypt.hash(user.local.password, salt, null, function(err, hash) {
       if (err) { return next(err); }
 
       // overwrite plain text password with encrypted password
@@ -51,7 +51,7 @@ userSchema.pre('save', function(next) {
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, callback) {
-  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+  bcrypt.compare(candidatePassword, this.local.password, function(err, isMatch) {
     if (err) { return callback(err); }
 
     callback(null, isMatch);

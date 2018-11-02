@@ -3,19 +3,12 @@ import './App.css';
 import Header from './Header.jsx';
 
 
-class App extends Component {
+export default ({ children }) => {
+  return (
+    <div className='App'>
+      <Header />
+      {children}
+    </div>
+  );
+};
 
-  render() {
-    return (
-      <div className="App">
-        <Header />
-
-        <main>
-
-        </main>
-      </div>
-    );
-  }
-}
-
-export default App;

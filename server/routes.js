@@ -7,23 +7,11 @@ module.exports = passport => {
   const router = new koaRouter();
   const requireAuth = passport.authenticate('jwt', { session: false });
 
-  router.get('/user/*', requireAuth, (ctx) => {
-    ctx.body = "Welcome! To the Koala Book of Everything!"
-  });
+  // router.get('/user/*', requireAuth, (ctx) => {
+  //   ctx.body = "Welcome! To the Koala Book of Everything!"
+  // });
 
   router.post('/register', Authentication.signup);
-
-  router.get('/login', async (ctx) => {
-    if (!ctx.isAuthenticated()) {
-      ctx.status = 400;
-      ctx.body = { status: 'error' };
-      // ctx.type = 'html';
-      // ctx.body = fs.createReadStream('../src/server/views/login.html');
-    } else {
-      //ctx.redirect('/auth/status');
-    }
-  });
-
 
   router.get('/logout', async (ctx) => {
     if (ctx.isAuthenticated()) {
