@@ -21,7 +21,7 @@ Finally I found [a tutorial to help me out](https://medium.com/@alexanderleon/im
 ###Google
 I started with adding Google authentication so that when the user clicks the Google button, Google returns a response with an access token. That gets sent from the client to the server for server-side authentication.
 
-The Medium article linked above uses passport-google-token on the server-side, but I found that hadn't been updated in at least 2 years and found a more recent library passport-google-id-token, that I use instead. But when I passed the authentication token to that strategy it failed; I found that I had to pass the tokenId instead.
+The Medium article linked above uses passport-google-token on the server-side, but I found that hadn't been updated in at least 2 years and found a more recent library passport-google-id-token, that I used instead to validate the google id token.
 
 ```
 import { GoogleLogin } from 'react-google-login';

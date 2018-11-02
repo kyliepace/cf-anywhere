@@ -8,10 +8,10 @@ class SignIn extends Component {
   onSubmit = formProps => {
     this.props.signin(formProps, (err) => {
       if (err) {
-        console.log('successfully logged in')
         this.props.history.push('/');
       }
       else {
+        console.log('successfully logged in')
         this.props.history.push('/')
       }
     });

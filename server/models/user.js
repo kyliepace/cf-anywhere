@@ -42,9 +42,8 @@ userSchema.pre('save', function(next) {
     // hash (encrypt) our password using the salt
     bcrypt.hash(user.local.password, salt, null, function(err, hash) {
       if (err) { return next(err); }
-
       // overwrite plain text password with encrypted password
-      user.password = hash;
+      user.local.password = hash;
       next();
     });
   });

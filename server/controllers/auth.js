@@ -2,7 +2,6 @@ const jwt = require('jwt-simple');
 const User = require('../models/user');
 
 function tokenForUser(user) {
-  console.log('user: ', user);
   const timestamp = new Date().getTime();
   return jwt.encode({ sub: user.id, iat: timestamp }, process.env.JWT_SECRET);
 }
@@ -70,7 +69,7 @@ exports.signup = async (ctx, next) => {
     newUser.local.id = newUser._id;
 
     let user = await newUser.save();
-    return afterAuth(null, newUser);
+    return afterAuth(null, user);
   }
   catch(err) {
     console.log(err);
