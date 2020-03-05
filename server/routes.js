@@ -1,15 +1,18 @@
 'use strict';
 const Authentication = require('./controllers/auth');
+const workout = require('./controllers/workout');
 const koaRouter = require('koa-router');
 
 
 module.exports = passport => {
   const router = new koaRouter();
-  const requireAuth = passport.authenticate('jwt', { session: false });
+  // const requireAuth = passport.authenticate('jwt', { session: false });
 
-  router.get('/user/*', requireAuth, (ctx) => {
-    ctx.body = "Welcome! To the Koala Book of Everything!"
-  });
+  // router.get('/user/*', requireAuth, (ctx) => {
+  //   ctx.body = "Welcome! To the Koala Book of Everything!"
+  // });
+
+  router.post('/wod', workout.add);
 
   router.post('/register', Authentication.signup);
 
