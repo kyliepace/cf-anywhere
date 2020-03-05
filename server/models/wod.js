@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const typeEnum = ['time', 'emom', 'rounds', 'amrap', 'reps', 'sets', 'rft', 'cals'];
-const unitsEnum = ['ft', 'kg', 'lbs'];
+const typeEnum = ['time', 'emom', 'rounds', 'amrap', 'reps', 'sets', 'rft', 'cals', 'distance'];
+const unitsEnum = ['ft', 'kg', 'lbs', 'm', 'km', 'mi'];
 // Define our model
 var wodSchema = mongoose.Schema({
   source: String,
