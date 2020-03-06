@@ -1,4 +1,6 @@
 import { AUTH_USER, UPDATE_USER, AUTH_ERROR } from './types';
+import { ADDED_WOD, WOD_ERROR } from './types';
+import { ADD_MOVEMENT } from './types';
 import axios from 'axios';
 
 export const signup = (formProps, callback) => async dispatch => {
@@ -57,3 +59,25 @@ export const logout = () => dispatch => {
     payload: ''
   });
 };
+
+export const addWod = (formProps, callback) => async dispatch => {
+  try {
+    const response = await axios.post(
+      'http://localhost:3060/wod',
+      formProps
+    );
+
+    dispatch({ type: ADDED_WOD, payload: response.data });
+    callback(null);
+  } catch (e) {
+    dispatch({ type: WOD_ERROR, payload: 'Error saving wod' });
+    callback(e);
+  }
+}
+
+export const addMovement = () => async dispatch => {
+  dispatch({
+    type: ADD_MOVEMENT,
+    payload: {}
+  });
+}

@@ -3,12 +3,13 @@ const Schema = mongoose.Schema;
 
 const typeEnum = ['time', 'emom', 'rounds', 'amrap', 'reps', 'sets', 'rft', 'cals', 'distance'];
 const unitsEnum = ['ft', 'kg', 'lbs', 'm', 'km', 'mi'];
+const sectionEnum = ['warmup', 'skill', 'barbell', 'accessory', 'wod'];
 // Define our model
 var wodSchema = mongoose.Schema({
   source: String,
   section: {
     type: String,
-    enum: ['warmup', 'skill', 'barbell', 'accessory', 'wod']
+    enum: sectionEnum
   },
   type: {
     type: String,
@@ -35,7 +36,8 @@ var wodSchema = mongoose.Schema({
       units: {
         type: String,
         enum: unitsEnum
-      }
+      },
+      movements: []
     }],
     default: undefined
   }

@@ -38,3 +38,29 @@
     transform: rotate(360deg);
   }
 }
+
+.meatAndPotatoes {
+  margin: 10px;
+}
+
+fieldset {
+  padding: 5px;
+}
+
+.movement {
+  border: 1px solid black;
+}
+
+input { 
+  margin: 0 10px;
+}
+
+#saveWod {
+  margin: 30px;
+  background-color: blueviolet;
+}
+
+.nested {
+  width: 90%;
+  border: 1px solid violet;
+}

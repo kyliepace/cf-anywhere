@@ -8,6 +8,7 @@ import App from './components/App';
 import SignUp from './components/auth/SignUp.jsx';
 import SignOut from './components/auth/SignOut.jsx';
 import SignIn from './components/auth/SignIn.jsx';
+import AddWod from'./components/wod/AddWod.jsx';
 
 ReactDOM.render(
   <Root>
@@ -16,6 +17,7 @@ ReactDOM.render(
         <Route path="/signup" component={SignUp} />
         <Route path="/signout" component={SignOut} />
         <Route path="/signin" component={SignIn} />
+        <Route path="/" exact component={AddWod} />
       </App>
     </BrowserRouter>
   </Root>,
